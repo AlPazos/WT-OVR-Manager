@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.gestores.wtovrmanager.controller.MainController">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="10" style="-fx-padding: 20 16 20 16;" styleClass="sidebar">
+            <Label styleClass="label-title" text="WT Manager" />
+            <Separator />
+            <Button maxWidth="Infinity" text="Dashboard" />
+            <Button maxWidth="Infinity" text="Combates" />
+            <Button maxWidth="Infinity" text="Competidores" />
+            <Button maxWidth="Infinity" text="Categorías" />
+         <Button maxWidth="1.7976931348623157E308" text="Generar Resultados" />
+            <Region VBox.vgrow="ALWAYS" />
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Region styleClass="status-dot,status-connected" />
+                <Label styleClass="label-subtitle" text="Conectado" />
+            </HBox>
+        </VBox>
+    </left>
+
+    <!-- Content -->
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
+            <content>
+                <VBox spacing="20" styleClass="content-area">
+
+                    <!-- Labels -->
+                    <Label styleClass="label-section" text="LABELS" />
+                    <Label styleClass="label-title" text="Título de la aplicación" />
+                    <Label styleClass="label-subtitle" text="Subtítulo descriptivo" />
+                    <HBox alignment="CENTER_LEFT" spacing="24">
+                        <Label styleClass="label-score,label-score-blue" text="42" />
+                        <Label styleClass="label-score,label-score-red" text="38" />
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" spacing="16">
+                        <Label styleClass="label-clock" text="12:45" />
+                        <Label styleClass="label-clock,label-clock-warning" text="01:30" />
+                        <Label styleClass="label-clock,label-clock-danger" text="00:08" />
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label styleClass="label-phase,label-phase-sf" text="SF" />
+                        <Label styleClass="label-phase,label-phase-f" text="F" />
+                        <Label styleClass="label-phase,label-phase-qf" text="QF" />
+                        <Label styleClass="label-phase,label-phase-r16" text="R16" />
+                        <Label styleClass="label-match-number" text="#7" />
+                    </HBox>
+
+                    <Separator />
+
+                    <!-- Buttons -->
+                    <Label styleClass="label-section" text="BUTTONS" />
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Button text="Default" />
+                        <Button styleClass="button-primary" text="Primary" />
+                        <Button styleClass="button-danger" text="Danger" />
+                        <Button styleClass="button-success" text="Success" />
+                        <Button styleClass="button-icon" text="⚙" />
+                    </HBox>
+
+                    <Separator />
+
+                    <!-- Badges + Status -->
+                    <Label styleClass="label-section" text="BADGES Y ESTADO" />
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label styleClass="badge,badge-available" text="DISPONIBLE" />
+                        <Label styleClass="badge,badge-started" text="EN CURSO" />
+                        <Label styleClass="badge,badge-finished" text="FINALIZADO" />
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <HBox alignment="CENTER_LEFT" spacing="6">
+                            <Region styleClass="status-dot,status-connected" />
+                            <Label text="Conectado" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="6">
+                            <Region styleClass="status-dot,status-connecting" />
+                            <Label text="Conectando" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="6">
+                            <Region styleClass="status-dot,status-disconnected" />
+                            <Label text="Desconectado" />
+                        </HBox>
+                    </HBox>
+
+                    <Separator />
+
+                    <!-- Form -->
+                    <Label styleClass="label-section" text="FORMULARIO" />
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <TextField prefWidth="220" promptText="Buscar atleta..." />
+                        <ComboBox prefWidth="160" promptText="Categoría..." />
+                        <CheckBox text="Solo activos" />
+                    </HBox>
+
+                    <Separator />
+
+                    <!-- Progress -->
+                    <Label styleClass="label-section" text="PROGRESO" />
+                    <VBox maxWidth="400" spacing="8">
+                        <ProgressBar maxWidth="Infinity" progress="0.25" />
+                        <ProgressBar maxWidth="Infinity" progress="0.6" />
+                        <ProgressBar maxWidth="Infinity" progress="1.0" />
+                    </VBox>
+
+                    <Separator />
+
+                    <!-- Cards -->
+                    <Label styleClass="label-section" text="CARDS" />
+                    <VBox maxWidth="380" spacing="6" styleClass="card">
+                        <Label styleClass="label-subtitle" text="Card genérica" />
+                        <Label text="Contenido descriptivo de la card." />
+                    </VBox>
+                    <HBox spacing="12">
+                        <VBox prefWidth="200" spacing="6" styleClass="card-match">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label styleClass="label-match-number" text="#1" />
+                                <Label styleClass="label-phase,label-phase-qf" text="QF" />
+                            </HBox>
+                            <Label text="García vs López" />
+                            <Label styleClass="badge,badge-available" text="DISPONIBLE" />
+                        </VBox>
+                        <VBox prefWidth="200" spacing="6" styleClass="card-match,card-match-active">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label styleClass="label-match-number" text="#2" />
+                                <Label styleClass="label-phase,label-phase-sf" text="SF" />
+                            </HBox>
+                            <Label text="Martínez vs Rodríguez" />
+                            <Label styleClass="badge,badge-started" text="EN CURSO" />
+                        </VBox>
+                        <VBox prefWidth="200" spacing="6" styleClass="card-match,card-match-finished">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label styleClass="label-match-number" text="#3" />
+                                <Label styleClass="label-phase,label-phase-f" text="F" />
+                            </HBox>
+                            <Label text="Fernández vs Pérez" />
+                            <Label styleClass="badge,badge-finished" text="FINALIZADO" />
+                        </VBox>
+                    </HBox>
+
+                    <Separator />
+
+                    <!-- Ring panels -->
+                    <Label styleClass="label-section" text="RING PANELS" />
+                    <HBox spacing="12">
+                        <VBox prefWidth="300" styleClass="ring-panel">
+                            <VBox spacing="2" style="-fx-padding: 12 16 12 16;" styleClass="ring-header,ring-header-blue">
+                                <Label styleClass="ring-number" text="TATAMI 1" />
+                                <Label styleClass="label-subtitle" text="Semifinal · Masculino -68kg" />
+                            </VBox>
+                            <HBox alignment="CENTER" spacing="24" style="-fx-padding: 16;">
+                                <VBox alignment="CENTER" spacing="4">
+                                    <Label styleClass="label-subtitle" text="García, A." />
+                                    <Label styleClass="label-score,label-score-blue" text="24" />
+                                </VBox>
+                                <Label text="VS" />
+                                <VBox alignment="CENTER" spacing="4">
+                                    <Label styleClass="label-subtitle" text="López, M." />
+                                    <Label styleClass="label-score,label-score-red" text="18" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                        <VBox prefWidth="300" styleClass="ring-panel">
+                            <VBox spacing="2" style="-fx-padding: 12 16 12 16;" styleClass="ring-header,ring-header-red">
+                                <Label styleClass="ring-number" text="TATAMI 2" />
+                                <Label styleClass="label-subtitle" text="Final · Femenino -57kg" />
+                            </VBox>
+                            <HBox alignment="CENTER" spacing="24" style="-fx-padding: 16;">
+                                <VBox alignment="CENTER" spacing="4">
+                                    <Label styleClass="label-subtitle" text="Martínez, C." />
+                                    <Label styleClass="label-score,label-score-blue" text="12" />
+                                </VBox>
+                                <Label text="VS" />
+                                <VBox alignment="CENTER" spacing="4">
+                                    <Label styleClass="label-subtitle" text="Rodríguez, P." />
+                                    <Label styleClass="label-score,label-score-red" text="15" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <Separator />
+
+                    <!-- TabPane -->
+                    <Label styleClass="label-section" text="TAB PANE" />
+                    <TabPane maxWidth="620" prefHeight="160">
+                        <tabs>
+                            <Tab closable="false" text="Partidos">
+                                <VBox spacing="8" style="-fx-padding: 12;">
+                                    <Label text="Lista de partidos aquí" />
+                                </VBox>
+                            </Tab>
+                            <Tab closable="false" text="Atletas">
+                                <VBox spacing="8" style="-fx-padding: 12;">
+                                    <Label text="Lista de atletas aquí" />
+                                </VBox>
+                            </Tab>
+                            <Tab closable="false" text="Resultados">
+                                <VBox spacing="8" style="-fx-padding: 12;">
+                                    <Label text="Resultados aquí" />
+                                </VBox>
+                            </Tab>
+                        </tabs>
+                    </TabPane>
+
+                    <Separator />
+
+                    <!-- TableView -->
+                    <Label styleClass="label-section" text="TABLE VIEW" />
+                    <TableView maxWidth="620" prefHeight="180">
+                        <columns>
+                            <TableColumn prefWidth="60" text="ID" />
+                            <TableColumn prefWidth="200" text="Atleta" />
+                            <TableColumn prefWidth="160" text="Categoría" />
+                            <TableColumn prefWidth="120" text="Estado" />
+                        </columns>
+                        <placeholder>
+                            <Label text="Sin datos" />
+                        </placeholder>
+                    </TableView>
+
+                    <Separator />
+
+                    <!-- Toolbar -->
+                    <Label styleClass="label-section" text="TOOLBAR" />
+                    <ToolBar>
+                        <Button styleClass="button-primary" text="Nuevo partido" />
+                        <Button text="Importar" />
+                        <Separator orientation="VERTICAL" />
+                        <Button styleClass="button-icon" text="⚙" />
+                    </ToolBar>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
