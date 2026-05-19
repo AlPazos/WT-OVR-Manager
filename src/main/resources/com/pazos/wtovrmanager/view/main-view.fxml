@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.pazos.wtovrmanager.controller.MainController">
 
-<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pazos.wtovrmanager.controller.MainController">
-   <center>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </center>
-   <left>
-      <Pane prefHeight="200.0" prefWidth="119.0" BorderPane.alignment="CENTER" />
-   </left>
+    <top>
+        <ToolBar>
+            <Button text="Cargar tapices" styleClass="button-primary" onAction="#loadRings"/>
+        </ToolBar>
+    </top>
+
+    <center>
+        <ScrollPane fitToHeight="true" vbarPolicy="NEVER">
+            <content>
+                <HBox fx:id="ringsContainer" spacing="12" style="-fx-padding: 20;"/>
+            </content>
+        </ScrollPane>
+    </center>
+
 </BorderPane>

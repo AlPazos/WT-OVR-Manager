@@ -1,7 +1,9 @@
 package com.pazos.wtovrmanager;
 
 import atlantafx.base.theme.PrimerDark;
+import com.pazos.wtovrmanager.component.MatchCard;
 import javafx.application.Application;
+import javafx.css.Match;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -28,6 +30,7 @@ public class MainApplication extends Application {
                 getClass().getResource("/com/pazos/wtovrmanager/view/main-view.fxml"),
                 bundle
         );
+
 
         Scene scene = new Scene(fxmlLoader.load(), 1080, 720);
         java.net.URL css = getClass().getResource(config.getProperty("app.css", ""));

@@ -316,8 +316,14 @@
     -fx-background-color: transparent;
 }
 
+.scroll-bar:vertical {
+    -fx-pref-width: 6;
+    -fx-min-width: 6;
+    -fx-max-width: 6;
+}
+
 .scroll-bar .thumb {
-    -fx-background-color: #334155;
+    -fx-background-color: transparent;
     -fx-background-radius: 99;
 }
 
@@ -339,6 +345,15 @@
 .scroll-bar .decrement-arrow {
     -fx-shape: "";
     -fx-padding: 0;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
 }
 
 /* ── TextField / ComboBox ─────────────────────────────────────── */
@@ -421,10 +436,10 @@
 }
 
 .ring-header {
-    -fx-background-color: #0f172a;
+    -fx-background-color: linear-gradient(to right, #0f3460, #1e293b);
     -fx-background-radius: 12 12 0 0;
     -fx-padding: 12 16 12 16;
-    -fx-border-color: transparent transparent #334155 transparent;
+    -fx-border-color: transparent transparent #2563eb transparent;
     -fx-border-width: 0 0 1 0;
 }
 
@@ -437,9 +452,10 @@
 }
 
 .ring-number {
-    -fx-font-size: 11px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #64748b;
+    -fx-text-fill: #f1f5f9;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.4), 6, 0, 0, 0);
 }
 
 /* ── Toolbar ──────────────────────────────────────────────────── */

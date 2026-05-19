@@ -11,7 +11,10 @@ module com.pazos.wtovrmanager {
 
     opens com.pazos.wtovrmanager to javafx.fxml;
     opens com.pazos.wtovrmanager.controller to javafx.fxml, javafx.graphics;
+    opens com.pazos.wtovrmanager.component to javafx.fxml;
     opens com.pazos.wtovrmanager.model to com.fasterxml.jackson.databind;
     exports com.pazos.wtovrmanager;
     exports com.pazos.wtovrmanager.model;
+    exports com.pazos.wtovrmanager.model.backendModels;
+    opens com.pazos.wtovrmanager.model.backendModels to com.fasterxml.jackson.databind;
 }
