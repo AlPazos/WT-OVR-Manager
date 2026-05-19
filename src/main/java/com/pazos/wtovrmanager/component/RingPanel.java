@@ -45,7 +45,7 @@ public class RingPanel extends VBox {
         scroll.setStyle("-fx-background-color: transparent;");
 
         getStyleClass().add("ring-panel");
-        setPrefWidth(260);
+        setMaxWidth(Double.MAX_VALUE);
         getChildren().addAll(header, liveCard, scroll);
 
         reloadMatches();

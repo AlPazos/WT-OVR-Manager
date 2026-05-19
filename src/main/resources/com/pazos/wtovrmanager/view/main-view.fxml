@@ -13,7 +13,7 @@
     </top>
 
     <center>
-        <ScrollPane fitToHeight="true" vbarPolicy="NEVER">
+        <ScrollPane fitToWidth="true" fitToHeight="true" vbarPolicy="NEVER">
             <content>
                 <HBox fx:id="ringsContainer" spacing="12" style="-fx-padding: 20;"/>
             </content>

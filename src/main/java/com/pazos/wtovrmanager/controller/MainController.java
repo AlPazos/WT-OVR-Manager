@@ -7,6 +7,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 import java.io.InputStream;
 import java.util.List;
@@ -50,7 +51,11 @@ public class MainController {
                 matches.stream()
                     .map(m -> m.getMat() != null ? m.getMat() : 0)
                     .collect(Collectors.toList())
-            ).forEach(ring -> ringsContainer.getChildren().add(new RingPanel(wsUrl, ring, api)));
+            ).forEach(ring -> {
+                RingPanel panel = new RingPanel(wsUrl, ring, api);
+                HBox.setHgrow(panel, Priority.ALWAYS);
+                ringsContainer.getChildren().add(panel);
+            });
         });
 
         task.setOnFailed(e -> {
