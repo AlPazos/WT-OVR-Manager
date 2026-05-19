@@ -2,7 +2,18 @@
 
 > **This project is currently under active development. Expect breaking changes.**
 
-A JavaFX desktop client for managing and displaying WT (World Taekwondo) competition overlays in real time. It connects to a running [WT-OVR-Bridge](https://github.com/AlPazos/WT-OVR-Bridge) server via WebSocket and REST, receiving live match events (scores, penalties, round time, competitors) and rendering them through a fully custom dark-themed UI.
+A JavaFX desktop client for managing and displaying WT (World Taekwondo) competition overlays in real time. It connects to a running [WT-OVR-Bridge](https://github.com/AlPazos/WT-OVR-Bridge) server via REST and WebSocket, showing live match data organized by mat/tatami in a fully custom dark-themed UI.
+
+---
+
+## Features
+
+- **Per-mat ring panels** — one panel per tatami, filling the available screen width
+- **Live match card** — each panel has a real-time card updated via WebSocket (scores, penalties, round time, competitor names, round status)
+- **Available matches list** — scrollable list of upcoming matches for that mat, filtered by `status = available`, showing phase (QF/SF/F), gender, athletes and category
+- **Auto-reload on match start** — when a `MATCH_STARTED` event arrives, the available matches list refreshes automatically via REST
+- **WebSocket auto-reconnect** — reconnects every 3 seconds if the connection drops
+- **Custom dark theme** — built on AtlantaFX PrimerDark with a fully overridden CSS stylesheet
 
 ---
 
@@ -39,6 +50,17 @@ mvn clean javafx:run
 
 ---
 
+## Architecture overview
+
+Each mat is represented by a **`RingPanel`** which owns a single `WebSocketService` connection to `{api.websocket.url}/mats/{ring}`. Two independent listeners are registered on that connection:
+
+- **`MatchCard`** — subscribes to all events and updates the live UI (scores, penalties, round time, competitor names, status badge)
+- **`RingPanel`** — listens for `MATCH_STARTED` and triggers a REST reload of the available matches list
+
+The WebSocket reconnects automatically every 3 seconds on drop. REST calls run on background threads; all UI updates go through `Platform.runLater`.
+
+---
+
 ## Configuration Reference
 
 | Key | Description |
@@ -47,17 +69,14 @@ mvn clean javafx:run
 | `app.css` | Path to the custom stylesheet |
 | `api.base.url` | Base URL of the WT-OVR-Bridge REST API |
 | `api.websocket.url` | Base URL for WebSocket connections |
-| `api.endpoint.matches` | Endpoint for match list |
-| `api.endpoint.athletes` | Endpoint for athlete list |
-| `api.endpoint.categories` | Endpoint for category list |
 
 ---
 
 ## Tech Stack
 
 - [JavaFX 21](https://openjfx.io/) — UI framework
-- [AtlantaFX](https://github.com/mkpaz/atlantafx) — base theme
-- [Jackson](https://github.com/FasterXML/jackson) — JSON deserialization
+- [AtlantaFX](https://github.com/mkpaz/atlantafx) — base theme (PrimerDark)
+- [Jackson 2.18](https://github.com/FasterXML/jackson) — JSON deserialization
 - [WT-OVR-Bridge](https://github.com/AlPazos/WT-OVR-Bridge) — Quarkus backend (required)
 
 ---
