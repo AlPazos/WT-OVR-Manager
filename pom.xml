@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.gestores</groupId>
+    <groupId>com.pazos</groupId>
     <artifactId>WT-OVR-Manager</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>WT-OVR-Manager</name>
@@ -85,7 +85,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>net.gestores.wtovrmanager/net.gestores.wtovrmanager.HelloApplication</mainClass>
+                            <mainClass>com.pazos.wtovrmanager.Launcher</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

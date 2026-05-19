@@ -1,4 +1,4 @@
-module net.gestores.wtovrmanager {
+module com.pazos.wtovrmanager {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -9,9 +9,9 @@ module net.gestores.wtovrmanager {
     requires com.fasterxml.jackson.databind;
     requires java.net.http;
 
-    opens net.gestores.wtovrmanager to javafx.fxml;
-    opens net.gestores.wtovrmanager.controller to javafx.fxml, javafx.graphics;
-    opens net.gestores.wtovrmanager.model to com.fasterxml.jackson.databind;
-    exports net.gestores.wtovrmanager;
-    exports net.gestores.wtovrmanager.model;
+    opens com.pazos.wtovrmanager to javafx.fxml;
+    opens com.pazos.wtovrmanager.controller to javafx.fxml, javafx.graphics;
+    opens com.pazos.wtovrmanager.model to com.fasterxml.jackson.databind;
+    exports com.pazos.wtovrmanager;
+    exports com.pazos.wtovrmanager.model;
 }
