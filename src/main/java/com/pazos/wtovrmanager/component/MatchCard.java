@@ -8,12 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.util.function.Consumer;
 
 public class MatchCard extends VBox {
 
     private final WebSocketService webSocket;
-    private Consumer<String> onAction;
     @FXML
     private Label lblMatchNumber;
     @FXML
@@ -37,7 +35,7 @@ public class MatchCard extends VBox {
     @FXML
     private Label lblPenalties;
 
-    public MatchCard(String baseWsUrl, int mat) {
+    public MatchCard(WebSocketService webSocket) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/com/pazos/wtovrmanager/component/match-card.fxml"));
         loader.setRoot(this);
@@ -48,19 +46,10 @@ public class MatchCard extends VBox {
             throw new RuntimeException(e);
         }
 
-        webSocket = new WebSocketService(baseWsUrl);
-        webSocket.setOnMessage(this::update);
+        this.webSocket = webSocket;
+        webSocket.addOnMessage(this::update);
         webSocket.setOnConnect(() -> setStatus("CONNECTED", "badge-available"));
         webSocket.setOnDisconnect(() -> setStatus("OFFLINE", "badge-available"));
-        webSocket.connect(mat);
-
-        sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene == null) webSocket.disconnect();
-        });
-    }
-
-    public void setOnAction(Consumer<String> onAction) {
-        this.onAction = onAction;
     }
 
     @FXML
@@ -84,7 +73,6 @@ public class MatchCard extends VBox {
                 "P " + event.getPenalties().getHome() + " – " + event.getPenalties().getAway());
 
         updateCardStyle(event.getAction());
-        if (onAction != null) onAction.accept(event.getAction());
     }
 
     private void updateCardStyle(String action) {

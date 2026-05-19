@@ -1,7 +1,10 @@
 package com.pazos.wtovrmanager.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 public class MatchEvent {
     private String matchNumber;
+    @JsonAlias("eventType")
     private String action;
     private int round;
     private String roundTime;

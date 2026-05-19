@@ -8,6 +8,8 @@ import javafx.application.Platform;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.WebSocket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -28,7 +30,7 @@ public class WebSocketService {
     private volatile boolean active = false;
     private int currentMat;
 
-    private Consumer<MatchEvent> onMessage;
+    private final List<Consumer<MatchEvent>> onMessageListeners = new ArrayList<>();
     private Runnable onConnect;
     private Runnable onDisconnect;
 
@@ -37,8 +39,8 @@ public class WebSocketService {
         this.httpClient = HttpClient.newHttpClient();
     }
 
-    public void setOnMessage(Consumer<MatchEvent> onMessage) {
-        this.onMessage = onMessage;
+    public void addOnMessage(Consumer<MatchEvent> listener) {
+        onMessageListeners.add(listener);
     }
 
     public void setOnConnect(Runnable onConnect) {
@@ -99,9 +101,9 @@ public class WebSocketService {
                 buffer.setLength(0);
                 try {
                     MatchEvent event = MAPPER.readValue(json, MatchEvent.class);
-                    Platform.runLater(() -> {
-                        if (onMessage != null) onMessage.accept(event);
-                    });
+                    Platform.runLater(() ->
+                        onMessageListeners.forEach(l -> l.accept(event))
+                    );
                 } catch (Exception ignored) {
                 }
             }

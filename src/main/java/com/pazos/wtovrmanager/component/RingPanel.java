@@ -2,6 +2,7 @@ package com.pazos.wtovrmanager.component;
 
 import com.pazos.wtovrmanager.model.backendModels.Match;
 import com.pazos.wtovrmanager.service.ApiService;
+import com.pazos.wtovrmanager.service.WebSocketService;
 import javafx.concurrent.Task;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -25,9 +26,16 @@ public class RingPanel extends VBox {
         VBox header = new VBox(lblRing);
         header.getStyleClass().add("ring-header");
 
-        MatchCard liveCard = new MatchCard(wsUrl, ring);
-        liveCard.setOnAction(action -> {
-            if ("MATCH_START".equals(action)) reloadMatches();
+        WebSocketService ws = new WebSocketService(wsUrl);
+        ws.addOnMessage(event -> {
+            if ("MATCH_STARTED".equals(event.getAction())) reloadMatches();
+        });
+        ws.connect(ring);
+
+        MatchCard liveCard = new MatchCard(ws);
+
+        sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene == null) ws.disconnect();
         });
 
         matchList.setStyle("-fx-padding: 12;");
