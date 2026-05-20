@@ -8,6 +8,7 @@ module com.pazos.wtovrmanager {
     requires atlantafx.base;
     requires com.fasterxml.jackson.databind;
     requires java.net.http;
+    requires AnimateFX;
 
     opens com.pazos.wtovrmanager to javafx.fxml;
     opens com.pazos.wtovrmanager.controller to javafx.fxml, javafx.graphics;

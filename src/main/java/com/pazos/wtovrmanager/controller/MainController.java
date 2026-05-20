@@ -30,7 +30,8 @@ public class MainController {
     private final ApiService api = new ApiService();
     private String wsUrl;
     private Category categoryNewMatch;
-    private List<Athlete> athletesNewMatch;
+    private SelectableCard<Athlete> blueCard;
+    private SelectableCard<Athlete> redCard;
     private Match newMatch;
 
     @FXML
@@ -85,16 +86,50 @@ public class MainController {
     private void newMatchGenerator() {
         showView(false);
         generatorContainer.getChildren().clear();
+        loadSelectionCategory();
+    }
+
+    private void loadSelectionCategory(){
         try {
             List<Category> categories = api.getCategories();
             categories.forEach(c -> generatorContainer.getChildren().add(
-                new SelectableCard<>(c, selected -> this.categoryNewMatch = selected)
+                    new SelectableCard<>(c, (categorySelected, card) -> {
+                        this.categoryNewMatch = categorySelected;
+                        generatorContainer.getChildren().clear();
+                        try {
+                            List<Athlete> athletes = api.getAthletesCategory(categoryNewMatch.getId());
+                            loadSelectionAthletes(athletes);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    })
             ));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private void loadSelectionAthletes(List<Athlete> athletes) {
+        blueCard = null;
+        redCard  = null;
+        athletes.forEach(a -> generatorContainer.getChildren().add(
+            new SelectableCard<>(a, (athleteSelected, card) -> {
+                if (card == blueCard) {
+                    blueCard = null;
+                    card.deselect();
+                } else if (card == redCard) {
+                    redCard = null;
+                    card.deselect();
+                } else if (blueCard == null) {
+                    blueCard = card;
+                    card.selectBlue();
+                } else if (redCard == null) {
+                    redCard = card;
+                    card.selectRed();
+                }
+            })
+        ));
+    }
     private void showView(boolean rings) {
         ringsScroll.setVisible(rings);
         ringsScroll.setManaged(rings);

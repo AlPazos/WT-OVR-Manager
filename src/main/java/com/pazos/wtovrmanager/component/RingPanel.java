@@ -76,7 +76,7 @@ public class RingPanel extends VBox {
         String cat = m.getCategory() != null ? m.getCategory().getName() : "-";
         String gender = m.getCategory() != null && m.getCategory().getGender() != null
                 ? m.getCategory().getGender().substring(0, 1) : "?";
-        String phase = m.getPhase() != null ? m.getPhase() : "-";
+        String phase = m.getPhase() != null ? I18n.getOrDefault("rounds." + m.getPhase(), m.getPhase()) : "-";
 
         Label lblNumber = new Label("#" + m.getMatchNumber());
         lblNumber.getStyleClass().add("label-match-number");
@@ -86,12 +86,14 @@ public class RingPanel extends VBox {
 
         Label lblBlue = new Label(blue);
         lblBlue.getStyleClass().add("label-score-blue");
+        lblBlue.setStyle("-fx-font-weight: bold;");
 
         Label lblVs = new Label(I18n.get("match.vs"));
         lblVs.getStyleClass().add("label-subtitle");
 
         Label lblRed = new Label(red);
         lblRed.getStyleClass().add("label-score-red");
+        lblRed.setStyle("-fx-font-weight: bold;");
 
         Label lblCat = new Label(cat);
         lblCat.getStyleClass().add("label-section");

@@ -18,4 +18,12 @@ public class I18n {
     public static String get(String key, Object... args) {
         return MessageFormat.format(bundle.getString(key), args);
     }
+
+    public static String getOrDefault(String key, String fallback) {
+        try {
+            return bundle.getString(key);
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
 }

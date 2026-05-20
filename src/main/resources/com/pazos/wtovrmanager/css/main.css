@@ -217,6 +217,41 @@
     -fx-opacity: 0.8;
 }
 
+/* ── SelectableCard ───────────────────────────────────────────── */
+.card-selectable {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 10;
+    -fx-border-color: #334155;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-padding: 12;
+    -fx-cursor: hand;
+}
+
+.card-selectable:hover {
+    -fx-background-color: #263348;
+    -fx-border-color: #2563eb;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.2), 8, 0, 0, 0);
+}
+
+.card-selectable-selected {
+    -fx-background-color: #172554;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.4), 12, 0, 0, 0);
+}
+
+.card-selectable-selected-red {
+    -fx-background-color: #450a0a;
+    -fx-border-color: #dc2626;
+    -fx-border-width: 2;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(220,38,38,0.4), 12, 0, 0, 0);
+}
+
 /* ── Status badges ────────────────────────────────────────────── */
 .badge {
     -fx-font-size: 10px;

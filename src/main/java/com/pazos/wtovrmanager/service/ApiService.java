@@ -71,4 +71,11 @@ public class ApiService {
         return MAPPER.readValue(response.body(),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Athlete.class));
     }
+
+    public List<Athlete> getAthletesCategory(int categoryId) throws Exception{
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/athletes/category/" + categoryId)).GET().build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return MAPPER.readValue(response.body(),
+                MAPPER.getTypeFactory().constructCollectionType(List.class, Athlete.class));
+    }
 }
