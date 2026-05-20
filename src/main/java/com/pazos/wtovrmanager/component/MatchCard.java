@@ -1,5 +1,6 @@
 package com.pazos.wtovrmanager.component;
 
+import com.pazos.wtovrmanager.I18n;
 import com.pazos.wtovrmanager.model.MatchEvent;
 import com.pazos.wtovrmanager.service.WebSocketService;
 import javafx.fxml.FXML;
@@ -48,8 +49,8 @@ public class MatchCard extends VBox {
 
         this.webSocket = webSocket;
         webSocket.addOnMessage(this::update);
-        webSocket.setOnConnect(() -> setStatus("CONNECTED", "badge-available"));
-        webSocket.setOnDisconnect(() -> setStatus("OFFLINE", "badge-available"));
+        webSocket.setOnConnect(() -> setStatus(I18n.get("status.connected"), "badge-available"));
+        webSocket.setOnDisconnect(() -> setStatus(I18n.get("status.offline"), "badge-available"));
     }
 
     @FXML
@@ -58,7 +59,7 @@ public class MatchCard extends VBox {
 
     private void update(MatchEvent event) {
         lblMatchNumber.setText("#" + event.getMatchNumber());
-        lblRound.setText("R" + event.getRound());
+        lblRound.setText(I18n.get("match.round.prefix") + event.getRound());
         lblRoundTime.setText(event.getRoundTime());
 
         lblHomeName.setText(event.getHome().getName());
@@ -70,7 +71,7 @@ public class MatchCard extends VBox {
         lblAwayScore.setText(String.valueOf(event.getScore().getAway()));
 
         lblPenalties.setText(
-                "P " + event.getPenalties().getHome() + " – " + event.getPenalties().getAway());
+                I18n.get("match.penalties.prefix") + " " + event.getPenalties().getHome() + " – " + event.getPenalties().getAway());
 
         updateCardStyle(event.getAction());
     }
@@ -81,14 +82,14 @@ public class MatchCard extends VBox {
             case "MATCH_START":
             case "MATCH_TIME":
                 getStyleClass().add("card-match-active");
-                setStatus("LIVE", "badge-started");
+                setStatus(I18n.get("status.live"), "badge-started");
                 break;
             case "MATCH_END":
                 getStyleClass().add("card-match-finished");
-                setStatus("FINISHED", "badge-finished");
+                setStatus(I18n.get("status.finished"), "badge-finished");
                 break;
             default:
-                setStatus("WAITING", "badge-available");
+                setStatus(I18n.get("status.waiting"), "badge-available");
                 break;
         }
     }

@@ -25,6 +25,7 @@ public class MainApplication extends Application {
 
         Locale locale = Locale.forLanguageTag(config.getProperty("app.language", "en"));
         ResourceBundle bundle = ResourceBundle.getBundle("com.pazos.wtovrmanager.i18n.messages", locale);
+        I18n.init(bundle);
 
         FXMLLoader fxmlLoader = new FXMLLoader(
                 getClass().getResource("/com/pazos/wtovrmanager/view/main-view.fxml"),

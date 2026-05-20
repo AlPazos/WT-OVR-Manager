@@ -1,5 +1,6 @@
 package com.pazos.wtovrmanager.component;
 
+import com.pazos.wtovrmanager.I18n;
 import com.pazos.wtovrmanager.model.backendModels.Match;
 import com.pazos.wtovrmanager.service.ApiService;
 import com.pazos.wtovrmanager.service.WebSocketService;
@@ -9,7 +10,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RingPanel extends VBox {
 
@@ -21,7 +21,7 @@ public class RingPanel extends VBox {
         this.ring = ring;
         this.api = api;
 
-        Label lblRing = new Label("TAPIZ " + ring);
+        Label lblRing = new Label(I18n.get("ring.label", ring));
         lblRing.getStyleClass().add("ring-number");
         VBox header = new VBox(lblRing);
         header.getStyleClass().add("ring-header");
@@ -45,7 +45,8 @@ public class RingPanel extends VBox {
         scroll.setStyle("-fx-background-color: transparent;");
 
         getStyleClass().add("ring-panel");
-        setMaxWidth(Double.MAX_VALUE);
+        setPrefWidth(300);
+        setMinWidth(280);
         getChildren().addAll(header, liveCard, scroll);
 
         reloadMatches();
@@ -70,23 +71,23 @@ public class RingPanel extends VBox {
     }
 
     private VBox buildCard(Match m) {
-        String blue   = m.getBlueAthlete() != null ? m.getBlueAthlete().getScoreboardName() : "-";
-        String red    = m.getRedAthlete()  != null ? m.getRedAthlete().getScoreboardName()  : "-";
-        String cat    = m.getCategory()    != null ? m.getCategory().getName()               : "-";
-        String gender = m.getCategory()    != null && m.getCategory().getGender() != null
-                        ? m.getCategory().getGender().substring(0, 1) : "?";
-        String phase  = m.getPhase()       != null ? m.getPhase() : "-";
+        String blue = m.getBlueAthlete() != null ? m.getBlueAthlete().getFullName() : "-";
+        String red = m.getRedAthlete() != null ? m.getRedAthlete().getFullName() : "-";
+        String cat = m.getCategory() != null ? m.getCategory().getName() : "-";
+        String gender = m.getCategory() != null && m.getCategory().getGender() != null
+                ? m.getCategory().getGender().substring(0, 1) : "?";
+        String phase = m.getPhase() != null ? m.getPhase() : "-";
 
         Label lblNumber = new Label("#" + m.getMatchNumber());
         lblNumber.getStyleClass().add("label-match-number");
 
-        Label lblMeta = new Label(phase + "  ·  " + gender);
+        Label lblMeta = new Label(phase + "  ·  " + (gender.equals("M") ? I18n.get("gender.male") : I18n.get("gender.female")));
         lblMeta.getStyleClass().add("label-subtitle");
 
         Label lblBlue = new Label(blue);
         lblBlue.getStyleClass().add("label-score-blue");
 
-        Label lblVs = new Label("vs");
+        Label lblVs = new Label(I18n.get("match.vs"));
         lblVs.getStyleClass().add("label-subtitle");
 
         Label lblRed = new Label(red);
