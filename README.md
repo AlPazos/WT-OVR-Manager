@@ -96,4 +96,23 @@ Please open an issue first if you plan to work on something significant, so we c
 
 ## License
 
-To be defined.
+This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
+
+**Copyright © 2026 Alex Pazos Amoedo**
+
+You are free to use, study, modify and distribute this software under the terms of the AGPL-3.0. Any modified version distributed or made available over a network must also be released under the same license with its source code publicly accessible. See the [LICENSE](LICENSE) file for the full terms.
+
+---
+
+## Distribution
+
+Any distribution of this software, modified or unmodified, must:
+
+- Include the original copyright notice and a copy of the AGPL-3.0 license
+- Make the complete corresponding source code available under the same license
+- If the software is run over a network, provide users access to the source code
+
+For questions about licensing or commercial use, contact the author:
+
+- **Author:** Alex Pazos Amoedo
+- **Email:** pazex04@gmail.com
