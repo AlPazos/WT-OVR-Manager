@@ -2,6 +2,8 @@ package com.pazos.wtovrmanager.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pazos.wtovrmanager.model.backendModels.Athlete;
+import com.pazos.wtovrmanager.model.backendModels.Category;
 import com.pazos.wtovrmanager.model.backendModels.Match;
 
 import java.net.URI;
@@ -54,5 +56,19 @@ public class ApiService {
 
         return MAPPER.readValue(response.body(),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Match.class));
+    }
+    public List<Category> getCategories() throws Exception{
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/categories")).GET().build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return MAPPER.readValue(response.body(),
+                MAPPER.getTypeFactory().constructCollectionType(List.class, Category.class));
+    }
+
+    public List<Athlete> getAthletes() throws Exception{
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/athletes")).GET().build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return MAPPER.readValue(response.body(),
+                MAPPER.getTypeFactory().constructCollectionType(List.class, Athlete.class));
     }
 }
