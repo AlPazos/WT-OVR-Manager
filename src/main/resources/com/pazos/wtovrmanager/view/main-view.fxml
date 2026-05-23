@@ -9,6 +9,7 @@
         <ToolBar>
             <Button onAction="#loadRingsView" styleClass="button-primary" text="%btn.load.rings" />
             <Button mnemonicParsing="false" onAction="#newMatchGenerator" styleClass="button-primary" text="%btn.match.generator" />
+            <Button mnemonicParsing="false" onAction="#showTournamentUpload" styleClass="button-primary" text="%btn.tournament.upload" />
         </ToolBar>
     </top>
 
@@ -24,6 +25,36 @@
                     <VBox spacing="16" style="-fx-padding: 20;">
                         <FlowPane fx:id="categoriesContainer" hgap="12" vgap="12" />
                         <FlowPane fx:id="athletesContainer" hgap="12" vgap="12" />
+                    </VBox>
+                </content>
+            </ScrollPane>
+            <ScrollPane fx:id="uploadScroll" fitToWidth="true" vbarPolicy="AS_NEEDED" visible="false" managed="false">
+                <content>
+                    <VBox spacing="24" style="-fx-padding: 40 60 40 60;">
+                        <Label styleClass="label-title" text="%lbl.tournament.upload" />
+
+                        <VBox spacing="6">
+                            <Label styleClass="label-section" text="%lbl.gemini.api.key" />
+                            <PasswordField fx:id="apiKeyField" promptText="AIza..." />
+                        </VBox>
+
+                        <VBox spacing="6">
+                            <Label styleClass="label-section" text="%lbl.tournament.pdf" />
+                            <VBox fx:id="dropZone" styleClass="drop-zone" alignment="CENTER" spacing="10" minHeight="180" onMouseClicked="#browsePdf">
+                                <Label styleClass="drop-zone-title" text="%lbl.drop.pdf" />
+                                <Label fx:id="fileNameLabel" styleClass="label-subtitle" text="" />
+                            </VBox>
+                        </VBox>
+
+                        <HBox spacing="12">
+                            <Button fx:id="generateButton" disable="true" onAction="#generate" styleClass="button-primary" text="%btn.generate" />
+                            <Button fx:id="uploadButton" disable="true" onAction="#upload" styleClass="button-success" text="%btn.upload.tournament" />
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <ProgressIndicator fx:id="uploadProgress" maxHeight="22" maxWidth="22" visible="false" />
+                            <Label fx:id="uploadStatusLabel" styleClass="label-subtitle" text="" />
+                        </HBox>
                     </VBox>
                 </content>
             </ScrollPane>

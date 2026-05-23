@@ -2,7 +2,7 @@
 
 > **This project is currently under active development. Expect breaking changes.**
 
-A JavaFX desktop client for managing and displaying WT (World Taekwondo) competition overlays in real time. It connects to a running [WT-OVR-Bridge](https://github.com/AlPazos/WT-OVR-Bridge) server via REST and WebSocket, showing live match data organized by mat/tatami in a fully custom dark-themed UI.
+A JavaFX desktop client for managing and displaying WT (World Taekwondo) competition overlays in real time. It connects to a running [WT-OVR-Bridge](https://github.com/AlPazos/WT-OVR-Bridge) server via REST and WebSocket, showing live match data organized by mat/tatami in a fully custom dark-themed UI. It also includes an AI-powered tournament importer that extracts match data from bracket PDFs using the Gemini API and uploads it directly to the backend.
 
 ---
 
@@ -11,17 +11,21 @@ A JavaFX desktop client for managing and displaying WT (World Taekwondo) competi
 - **Per-mat ring panels** — one panel per tatami, filling the available screen width
 - **Live match card** — each panel has a real-time card updated via WebSocket (scores, penalties, round time, competitor names, round status)
 - **Available matches list** — scrollable list of upcoming matches for that mat, filtered by `status = available`, showing phase (QF/SF/F), gender, athletes and category
+- **Match generator** — select a category and assign blue/red athletes to create new matches
+- **Tournament importer** — drag & drop (or browse) a bracket PDF, extract all matches with Gemini 2.5 Flash, review the result and upload it to the backend in one click
 - **Auto-reload on match start** — when a `MATCH_STARTED` event arrives, the available matches list refreshes automatically via REST
 - **WebSocket auto-reconnect** — reconnects every 3 seconds if the connection drops
 - **Custom dark theme** — built on AtlantaFX PrimerDark with a fully overridden CSS stylesheet
+- **i18n** — English and Galician out of the box
 
 ---
 
 ## Requirements
 
-- **Java 11** or higher (JDK 21 recommended)
+- **Java 16** or higher (JDK 21 recommended)
 - **Maven 3.8+**
 - A running instance of [**WT-OVR-Bridge**](https://github.com/AlPazos/WT-OVR-Bridge) — the Quarkus backend that connects to the scoring system and broadcasts events over WebSocket
+- A **Gemini API key** (only required for the tournament importer) — get one at [aistudio.google.com](https://aistudio.google.com)
 
 ---
 
@@ -77,6 +81,8 @@ The WebSocket reconnects automatically every 3 seconds on drop. REST calls run o
 - [JavaFX 21](https://openjfx.io/) — UI framework
 - [AtlantaFX](https://github.com/mkpaz/atlantafx) — base theme (PrimerDark)
 - [Jackson 2.18](https://github.com/FasterXML/jackson) — JSON deserialization
+- [AnimateFX](https://github.com/Typhon0/AnimateFX) — UI animations
+- [Google GenAI Java SDK](https://github.com/googleapis/java-genai) — Gemini API client
 - [WT-OVR-Bridge](https://github.com/AlPazos/WT-OVR-Bridge) — Quarkus backend (required)
 
 ---

@@ -585,6 +585,35 @@
     -fx-background-color: white;
 }
 
+/* ── Drop zone ────────────────────────────────────────────────── */
+.drop-zone {
+    -fx-background-color: #0f172a;
+    -fx-background-radius: 12;
+    -fx-border-color: #334155;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-border-style: segments(10, 8) line-cap round;
+    -fx-padding: 32;
+    -fx-cursor: hand;
+}
+
+.drop-zone:hover {
+    -fx-border-color: #2563eb;
+    -fx-background-color: #0c1829;
+}
+
+.drop-zone-active {
+    -fx-border-color: #3b82f6;
+    -fx-background-color: #0c1e3d;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.3), 12, 0, 0, 0);
+}
+
+.drop-zone-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748b;
+}
+
 /* ── Tooltip ──────────────────────────────────────────────────── */
 .tooltip {
     -fx-background-color: #1e293b;

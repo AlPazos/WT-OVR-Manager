@@ -13,6 +13,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Properties;
+import java.nio.charset.StandardCharsets;
 
 public class ApiService {
 
@@ -64,5 +65,14 @@ public class ApiService {
     public List<Athlete> getAthletesCategory(int categoryId) throws IOException, InterruptedException {
         return MAPPER.readValue(get("/athletes/category/" + categoryId),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Athlete.class));
+    }
+
+    public void uploadTournament(String json) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/uploadTournament"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8))
+                .build();
+        httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     }
 }

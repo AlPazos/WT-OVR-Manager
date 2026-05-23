@@ -8,15 +8,26 @@ import com.pazos.wtovrmanager.model.backendModels.Athlete;
 import com.pazos.wtovrmanager.model.backendModels.Category;
 import com.pazos.wtovrmanager.model.backendModels.Match;
 import com.pazos.wtovrmanager.service.ApiService;
+import com.pazos.wtovrmanager.service.GeminiService;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeSet;
@@ -29,8 +40,18 @@ public class MainController {
     @FXML private ScrollPane generatorScroll;
     @FXML private FlowPane categoriesContainer;
     @FXML private FlowPane athletesContainer;
+    @FXML private ScrollPane uploadScroll;
+    @FXML private PasswordField apiKeyField;
+    @FXML private VBox dropZone;
+    @FXML private Label fileNameLabel;
+    @FXML private Label uploadStatusLabel;
+    @FXML private ProgressIndicator uploadProgress;
+    @FXML private Button generateButton;
+    @FXML private Button uploadButton;
 
     private final ApiService api = new ApiService();
+    private File pendingPdf;
+    private String generatedJson;
     private String wsUrl;
     private Category categoryNewMatch;
     private SelectableCard<Category> selectedCategoryCard;
@@ -47,7 +68,140 @@ public class MainController {
             e.printStackTrace();
         }
         wsUrl = config.getProperty("api.websocket.url", "");
+        initDropZone();
         loadRings();
+    }
+
+    private void initDropZone() {
+        dropZone.getChildren().forEach(child -> child.setMouseTransparent(true));
+
+        dropZone.setOnDragOver(event -> {
+            event.acceptTransferModes(TransferMode.COPY);
+            event.consume();
+        });
+
+        dropZone.setOnDragEntered(event -> {
+            dropZone.getStyleClass().add("drop-zone-active");
+            event.consume();
+        });
+
+        dropZone.setOnDragExited(event -> {
+            dropZone.getStyleClass().remove("drop-zone-active");
+            event.consume();
+        });
+
+        dropZone.setOnDragDropped(event -> {
+            dropZone.getStyleClass().remove("drop-zone-active");
+            List<File> files = event.getDragboard().getFiles();
+            if (!files.isEmpty()) {
+                File file = files.get(0);
+                if (file.getName().toLowerCase().endsWith(".pdf")) {
+                    pendingPdf = file;
+                    generatedJson = null;
+                    fileNameLabel.setText(file.getName());
+                    uploadStatusLabel.setText("");
+                    generateButton.setDisable(false);
+                    uploadButton.setDisable(true);
+                } else {
+                    uploadStatusLabel.setText(I18n.get("upload.status.invalid.file"));
+                }
+            }
+            event.setDropCompleted(true);
+            event.consume();
+        });
+    }
+
+    @FXML
+    private void browsePdf(MouseEvent event) {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Select tournament PDF");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+        File file = chooser.showOpenDialog(dropZone.getScene().getWindow());
+        if (file != null) {
+            pendingPdf = file;
+            generatedJson = null;
+            fileNameLabel.setText(file.getName());
+            uploadStatusLabel.setText("");
+            generateButton.setDisable(false);
+            uploadButton.setDisable(true);
+        }
+    }
+
+    @FXML
+    private void generate() {
+        if (pendingPdf == null) return;
+        String apiKey = apiKeyField.getText().trim();
+        if (apiKey.isEmpty()) {
+            uploadStatusLabel.setText(I18n.get("upload.status.no.key"));
+            return;
+        }
+
+        generateButton.setDisable(true);
+        uploadButton.setDisable(true);
+        uploadProgress.setVisible(true);
+        uploadStatusLabel.setText(I18n.get("upload.status.extracting"));
+        File pdfFile = pendingPdf;
+
+        Task<String> task = new Task<>() {
+            @Override
+            protected String call() throws Exception {
+                byte[] pdfBytes = Files.readAllBytes(pdfFile.toPath());
+                GeminiService gemini = new GeminiService(apiKey, "gemini-2.5-flash");
+                return gemini.extractMAtches(pdfBytes);
+            }
+        };
+
+        task.setOnSucceeded(e -> {
+            generatedJson = task.getValue();
+            try {
+                Files.writeString(java.nio.file.Path.of("tournament_output.json"), generatedJson);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            uploadProgress.setVisible(false);
+            uploadStatusLabel.setText(I18n.get("upload.status.generated"));
+            generateButton.setDisable(false);
+            uploadButton.setDisable(false);
+        });
+
+        task.setOnFailed(e -> {
+            uploadProgress.setVisible(false);
+            uploadStatusLabel.setText(I18n.get("upload.status.error", task.getException().getMessage()));
+            generateButton.setDisable(false);
+        });
+
+        new Thread(task).start();
+    }
+
+    @FXML
+    private void upload() {
+        if (generatedJson == null) return;
+
+        uploadButton.setDisable(true);
+        uploadProgress.setVisible(true);
+        uploadStatusLabel.setText(I18n.get("upload.status.uploading"));
+
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                api.uploadTournament(generatedJson);
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(e -> {
+            uploadProgress.setVisible(false);
+            uploadStatusLabel.setText(I18n.get("upload.status.done"));
+            uploadButton.setDisable(false);
+        });
+
+        task.setOnFailed(e -> {
+            uploadProgress.setVisible(false);
+            uploadStatusLabel.setText(I18n.get("upload.status.error", task.getException().getMessage()));
+            uploadButton.setDisable(false);
+        });
+
+        new Thread(task).start();
     }
 
     @FXML
@@ -67,9 +221,7 @@ public class MainController {
                 matches.stream()
                     .map(m -> m.getMat() != null ? m.getMat() : 0)
                     .collect(Collectors.toList())
-            ).forEach(ring -> {
-                ringsContainer.getChildren().add(new RingPanel(wsUrl, ring, api));
-            });
+            ).forEach(ring -> ringsContainer.getChildren().add(new RingPanel(wsUrl, ring, api)));
         });
 
         task.setOnFailed(e -> {
@@ -80,15 +232,16 @@ public class MainController {
 
         new Thread(task).start();
     }
+
     @FXML
     private void loadRingsView() {
-        showView(true);
+        showView("rings");
         loadRings();
     }
 
     @FXML
     private void newMatchGenerator() {
-        showView(false);
+        showView("generator");
         categoriesContainer.getChildren().clear();
         athletesContainer.getChildren().clear();
         selectedCategoryCard = null;
@@ -96,6 +249,11 @@ public class MainController {
         blueCard = null;
         redCard  = null;
         loadSelectionCategory();
+    }
+
+    @FXML
+    private void showTournamentUpload() {
+        showView("upload");
     }
 
     private void loadSelectionCategory() {
@@ -154,10 +312,13 @@ public class MainController {
             anim.play();
         });
     }
-    private void showView(boolean rings) {
-        ringsScroll.setVisible(rings);
-        ringsScroll.setManaged(rings);
-        generatorScroll.setVisible(!rings);
-        generatorScroll.setManaged(!rings);
+
+    private void showView(String view) {
+        ringsScroll.setVisible("rings".equals(view));
+        ringsScroll.setManaged("rings".equals(view));
+        generatorScroll.setVisible("generator".equals(view));
+        generatorScroll.setManaged("generator".equals(view));
+        uploadScroll.setVisible("upload".equals(view));
+        uploadScroll.setManaged("upload".equals(view));
     }
 }
