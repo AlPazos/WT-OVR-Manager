@@ -1,5 +1,6 @@
 package com.pazos.wtovrmanager.controller;
 
+import animatefx.animation.AnimationFX;
 import com.pazos.wtovrmanager.I18n;
 import com.pazos.wtovrmanager.component.RingPanel;
 import com.pazos.wtovrmanager.component.SelectableCard;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 
 import java.io.InputStream;
 import java.util.List;
@@ -25,11 +27,13 @@ public class MainController {
     @FXML private HBox ringsContainer;
     @FXML private ScrollPane ringsScroll;
     @FXML private ScrollPane generatorScroll;
-    @FXML private FlowPane generatorContainer;
+    @FXML private FlowPane categoriesContainer;
+    @FXML private FlowPane athletesContainer;
 
     private final ApiService api = new ApiService();
     private String wsUrl;
     private Category categoryNewMatch;
+    private SelectableCard<Category> selectedCategoryCard;
     private SelectableCard<Athlete> blueCard;
     private SelectableCard<Athlete> redCard;
     private Match newMatch;
@@ -85,17 +89,32 @@ public class MainController {
     @FXML
     private void newMatchGenerator() {
         showView(false);
-        generatorContainer.getChildren().clear();
+        categoriesContainer.getChildren().clear();
+        athletesContainer.getChildren().clear();
+        selectedCategoryCard = null;
+        categoryNewMatch = null;
+        blueCard = null;
+        redCard  = null;
         loadSelectionCategory();
     }
 
-    private void loadSelectionCategory(){
+    private void loadSelectionCategory() {
         try {
             List<Category> categories = api.getCategories();
-            categories.forEach(c -> generatorContainer.getChildren().add(
+            categories.forEach(c -> categoriesContainer.getChildren().add(
                     new SelectableCard<>(c, (categorySelected, card) -> {
-                        this.categoryNewMatch = categorySelected;
-                        generatorContainer.getChildren().clear();
+                        if (categoryNewMatch != null && categoryNewMatch.getId() == categorySelected.getId()) {
+                            return;
+                        }
+                        if (selectedCategoryCard != null) {
+                            selectedCategoryCard.deselect();
+                        }
+                        categoryNewMatch = categorySelected;
+                        selectedCategoryCard = card;
+                        card.selectBlue();
+                        athletesContainer.getChildren().clear();
+                        blueCard = null;
+                        redCard  = null;
                         try {
                             List<Athlete> athletes = api.getAthletesCategory(categoryNewMatch.getId());
                             loadSelectionAthletes(athletes);
@@ -110,10 +129,8 @@ public class MainController {
     }
 
     private void loadSelectionAthletes(List<Athlete> athletes) {
-        blueCard = null;
-        redCard  = null;
-        athletes.forEach(a -> generatorContainer.getChildren().add(
-            new SelectableCard<>(a, (athleteSelected, card) -> {
+        athletes.forEach(a -> {
+            SelectableCard<Athlete> cardNew = new SelectableCard<>(a, (athleteSelected, card) -> {
                 if (card == blueCard) {
                     blueCard = null;
                     card.deselect();
@@ -127,8 +144,15 @@ public class MainController {
                     redCard = card;
                     card.selectRed();
                 }
-            })
-        ));
+            });
+            cardNew.setOpacity(0);
+            athletesContainer.getChildren().add(cardNew);
+            AnimationFX anim = new animatefx.animation.RotateInUpLeft(cardNew);
+            anim.setSpeed(1.5);
+            anim.setDelay(Duration.millis(100 * athletesContainer.getChildren().size()));
+            anim.setOnFinished(event -> cardNew.setOpacity(1));
+            anim.play();
+        });
     }
     private void showView(boolean rings) {
         ringsScroll.setVisible(rings);

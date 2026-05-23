@@ -20,7 +20,7 @@
             <Label fx:id="lblHomeCountry" styleClass="label-section" text=""/>
             <Label fx:id="lblHomeScore" styleClass="label-score,label-score-blue" text="0"/>
         </VBox>
-        <VBox alignment="CENTER" spacing="4">
+        <VBox alignment="CENTER" spacing="4" HBox.hgrow="NEVER" minWidth="80" maxWidth="80">
             <Label fx:id="lblRoundTime" styleClass="label-clock" text="--:--"/>
         </VBox>
         <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">

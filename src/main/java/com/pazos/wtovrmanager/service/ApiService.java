@@ -6,6 +6,7 @@ import com.pazos.wtovrmanager.model.backendModels.Athlete;
 import com.pazos.wtovrmanager.model.backendModels.Category;
 import com.pazos.wtovrmanager.model.backendModels.Match;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -32,50 +33,36 @@ public class ApiService {
         this.httpClient = HttpClient.newHttpClient();
     }
 
-    public List<Match> getMatches() throws Exception {
+    private String get(String path) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/matches"))
+                .uri(URI.create(baseUrl + path))
                 .GET()
                 .build();
+        return httpClient.send(request, HttpResponse.BodyHandlers.ofString()).body();
+    }
 
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
-
-        return MAPPER.readValue(response.body(),
+    public List<Match> getMatches() throws IOException, InterruptedException {
+        return MAPPER.readValue(get("/matches"),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Match.class));
     }
 
-    public List<Match> getMatchesRing(int ring) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/matches/" + ring))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
-
-        return MAPPER.readValue(response.body(),
+    public List<Match> getMatchesRing(int ring) throws IOException, InterruptedException {
+        return MAPPER.readValue(get("/matches/" + ring),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Match.class));
     }
-    public List<Category> getCategories() throws Exception{
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/categories")).GET().build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return MAPPER.readValue(response.body(),
+    public List<Category> getCategories() throws IOException, InterruptedException {
+        return MAPPER.readValue(get("/categories"),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Category.class));
     }
 
-    public List<Athlete> getAthletes() throws Exception{
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/athletes")).GET().build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        return MAPPER.readValue(response.body(),
+    public List<Athlete> getAthletes() throws IOException, InterruptedException {
+        return MAPPER.readValue(get("/athletes"),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Athlete.class));
     }
 
-    public List<Athlete> getAthletesCategory(int categoryId) throws Exception{
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/athletes/category/" + categoryId)).GET().build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        return MAPPER.readValue(response.body(),
+    public List<Athlete> getAthletesCategory(int categoryId) throws IOException, InterruptedException {
+        return MAPPER.readValue(get("/athletes/category/" + categoryId),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Athlete.class));
     }
 }

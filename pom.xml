@@ -26,6 +26,11 @@
             <version>21.0.6</version>
         </dependency>
         <dependency>
+            <groupId>com.google.genai</groupId>
+            <artifactId>google-genai</artifactId>
+            <version>1.55.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
             <version>11.2.1</version>
@@ -67,7 +72,6 @@
             <artifactId>AnimateFX</artifactId>
             <version>1.2.4</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -87,7 +91,6 @@
                 <version>0.0.8</version>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>com.pazos.wtovrmanager.Launcher</mainClass>

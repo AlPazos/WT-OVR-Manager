@@ -89,7 +89,7 @@
 .label-phase-r16  { -fx-background-color: #374151; }
 
 .label-clock {
-    -fx-font-size: 36px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: #f1f5f9;
     -fx-font-family: "Courier New", monospace;

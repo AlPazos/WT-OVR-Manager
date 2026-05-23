@@ -19,9 +19,12 @@
                     <HBox fx:id="ringsContainer" spacing="12" style="-fx-padding: 20;" />
                 </content>
             </ScrollPane>
-            <ScrollPane fx:id="generatorScroll" fitToWidth="true" vbarPolicy="NEVER" visible="false" managed="false">
+            <ScrollPane fx:id="generatorScroll" fitToWidth="true" vbarPolicy="AS_NEEDED" visible="false" managed="false">
                 <content>
-                    <FlowPane fx:id="generatorContainer" hgap="12" vgap="12" style="-fx-padding: 20;" />
+                    <VBox spacing="16" style="-fx-padding: 20;">
+                        <FlowPane fx:id="categoriesContainer" hgap="12" vgap="12" />
+                        <FlowPane fx:id="athletesContainer" hgap="12" vgap="12" />
+                    </VBox>
                 </content>
             </ScrollPane>
         </StackPane>
